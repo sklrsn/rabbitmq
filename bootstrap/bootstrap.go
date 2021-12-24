@@ -50,7 +50,7 @@ func init() {
 	wg.Add(2)
 
 	ctx, cancel := context.WithCancel(context.Background())
-	ticker := time.NewTicker(10 * time.Second)
+	ticker := time.NewTicker(15 * time.Second)
 
 	go func() {
 		defer wg.Done()
