@@ -107,7 +107,7 @@ func main() {
 		log.Fatalf("%v", err)
 	}
 
-	//un-routed
+	//unrouted
 	if err := channel.ExchangeDeclare(fmt.Sprintf("%v.unrouted", os.Getenv("EXCHANGE_NAME")),
 		os.Getenv("EXCHANGE_TYPE"), true, false, false, false, amqp.Table{}); err != nil {
 		log.Fatalf("%v", err)
