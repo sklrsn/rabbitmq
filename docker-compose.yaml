@@ -9,3 +9,13 @@ services:
       - 8080:8080
       - 15671:15671
       - 15672:15672
+
+  bootstrap:
+    build: bootstrap
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=guest
+      - RABBITMQ_PASSWORD=guest
+    depends_on:
+      - rabbitmq
