@@ -105,8 +105,14 @@ func main() {
 		log.Fatalf("%v", err)
 	}
 
+	if err := channel.ExchangeDeclare(fmt.Sprintf("%v.unrouted", os.Getenv("EXCHANGE_NAME")),
+		os.Getenv("EXCHANGE_TYPE"), true, false, false, false, amqp.Table{}); err != nil {
+		log.Fatalf("%v", err)
+	}
+
 	if err := channel.ExchangeDeclare(os.Getenv("EXCHANGE_NAME"), os.Getenv("EXCHANGE_TYPE"),
-		true, false, false, false, amqp.Table{}); err != nil {
+		true, false, false, false, amqp.Table{
+			"alternate-exchange": fmt.Sprintf("%v.unrouted", os.Getenv("EXCHANGE_NAME"))}); err != nil {
 		log.Fatalf("%v", err)
 	}
 
