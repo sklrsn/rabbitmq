@@ -17,3 +17,7 @@ down:
 
 commit:
 	@git add . && git commit -am $(MESSAGE) && git push
+
+clean:
+	@docker system prune -f
+	@docker volume prune -f
