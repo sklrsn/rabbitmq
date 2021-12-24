@@ -50,6 +50,10 @@ func init() {
 		os.Exit(1)
 	}
 
+	if len(os.Getenv("EXCHANGE_NAME")) == 0 || len(os.Getenv("EXCHANGE_NAME")) == 0 {
+		os.Exit(1)
+	}
+
 	var wg sync.WaitGroup
 	wg.Add(2)
 
@@ -96,6 +100,21 @@ func init() {
 }
 
 func main() {
-	log.Println("bootstrap finished")
+	channel, err := rc.Channel()
+	if err != nil {
+		log.Fatalf("%v", err)
+	}
 
+	if err := channel.ExchangeDeclare(os.Getenv("EXCHANGE_NAME"), os.Getenv("EXCHANGE_TYPE"),
+		true, false, false, false, amqp.Table{}); err != nil {
+		log.Fatalf("%v", err)
+	}
+
+	for i := 1; i <= 4; i++ {
+		if _, err := channel.QueueDeclare(fmt.Sprintf("logs.0%v", i), true, false, false, false, amqp.Table{}); err != nil {
+			log.Fatalf("%v", err)
+		}
+	}
+
+	log.Println("bootstrap finished ...")
 }
