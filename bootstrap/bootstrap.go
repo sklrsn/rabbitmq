@@ -111,7 +111,13 @@ func main() {
 	}
 
 	for i := 1; i <= 4; i++ {
-		if _, err := channel.QueueDeclare(fmt.Sprintf("logs.0%v", i), true, false, false, false, amqp.Table{}); err != nil {
+		if queue, err := channel.QueueDeclare(fmt.Sprintf("logs.0%v", i), true, false, false,
+			false, amqp.Table{}); err == nil {
+			if err := channel.QueueBind(queue.Name, "10", os.Getenv("EXCHANGE_NAME"), false,
+				amqp.Table{"x-max-priority": 10}); err != nil {
+				log.Fatalf("%v", err)
+			}
+		} else {
 			log.Fatalf("%v", err)
 		}
 	}
