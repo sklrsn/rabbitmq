@@ -11,11 +11,11 @@ import (
 	"github.com/streadway/amqp"
 )
 
-type RConnetion struct {
+type RConnection struct {
 	conn *amqp.Connection
 }
 
-func (rc *RConnetion) Connect(rabbitmqUser, rabbitmqSecret, rabbitmqHost string) error {
+func (rc *RConnection) Connect(rabbitmqUser, rabbitmqSecret, rabbitmqHost string) error {
 	conn, err := amqp.Dial(fmt.Sprintf("amqp://%v:%v@%v", rabbitmqUser, rabbitmqSecret, rabbitmqHost))
 	if err != nil {
 		return err
@@ -25,14 +25,18 @@ func (rc *RConnetion) Connect(rabbitmqUser, rabbitmqSecret, rabbitmqHost string)
 	return nil
 }
 
-func (rc *RConnetion) Close() {
+func (rc *RConnection) Close() {
 	if rc.conn != nil {
 		rc.conn.Close()
 	}
 }
 
+func (rc *RConnection) Channel() (*amqp.Channel, error) {
+	return rc.conn.Channel()
+}
+
 var (
-	rc = RConnetion{}
+	rc = RConnection{}
 )
 
 func init() {
@@ -93,4 +97,5 @@ func init() {
 
 func main() {
 	log.Println("bootstrap finished")
+
 }
