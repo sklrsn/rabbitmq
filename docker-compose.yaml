@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  rabbitmq:
+    build: rabbitmq
+    ports:
+      - 5671:5671
+      - 5672:5672
+      - 8080:8080
