@@ -11,11 +11,11 @@ import (
 	"github.com/streadway/amqp"
 )
 
-type RConnection struct {
+type Connection struct {
 	conn *amqp.Connection
 }
 
-func (rc *RConnection) Connect(rabbitmqUser, rabbitmqSecret, rabbitmqHost string) error {
+func (rc *Connection) Connect(rabbitmqUser, rabbitmqSecret, rabbitmqHost string) error {
 	conn, err := amqp.Dial(fmt.Sprintf("amqp://%v:%v@%v", rabbitmqUser, rabbitmqSecret, rabbitmqHost))
 	if err != nil {
 		return err
@@ -25,18 +25,22 @@ func (rc *RConnection) Connect(rabbitmqUser, rabbitmqSecret, rabbitmqHost string
 	return nil
 }
 
-func (rc *RConnection) Close() {
+func (rc *Connection) IsConnected() bool {
+	return rc.conn != nil
+}
+
+func (rc *Connection) Close() {
 	if rc.conn != nil {
 		rc.conn.Close()
 	}
 }
 
-func (rc *RConnection) Channel() (*amqp.Channel, error) {
+func (rc *Connection) Channel() (*amqp.Channel, error) {
 	return rc.conn.Channel()
 }
 
 var (
-	rc = RConnection{}
+	rc = Connection{}
 )
 
 func init() {
@@ -65,7 +69,7 @@ func init() {
 		for {
 			select {
 			case <-ticker.C:
-				if rc.conn != nil {
+				if rc.IsConnected() {
 					log.Println("Connection established ...")
 					return
 				}
@@ -78,7 +82,7 @@ func init() {
 
 	go func(ctx context.Context, wg *sync.WaitGroup) {
 		defer wg.Done()
-		for rc.conn == nil {
+		for !rc.IsConnected() {
 			select {
 			case <-ctx.Done():
 				log.Println("context expired ....")

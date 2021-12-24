@@ -8,7 +8,7 @@ RUN go mod init github.com/sklsn/bootstrap && \
     go mod download && \
     go mod tidy
 
-RUN go build -o /opt/rabbitmq/bootstrap
+RUN go build -o /opt/rabbitmq/bootstrap .
 
 RUN chmod +x /opt/rabbitmq/bootstrap
 
