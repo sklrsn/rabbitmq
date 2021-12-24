@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/streadway/amqp"
 )
@@ -53,9 +54,12 @@ func init() {
 			if err := rc.Connect(rabbitmqUser, rabbitmqSecret, rabbitmqHost); err != nil {
 				log.Println(err)
 			}
+			time.Sleep(5 * time.Second)
 		}
 		log.Println("connected ...")
 	}(&wg)
+
+	wg.Wait()
 }
 
 func main() {
