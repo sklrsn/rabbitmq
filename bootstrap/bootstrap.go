@@ -100,27 +100,43 @@ func init() {
 }
 
 func main() {
+	defer rc.Close()
+
 	channel, err := rc.Channel()
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
 
+	//un-routed
 	if err := channel.ExchangeDeclare(fmt.Sprintf("%v.unrouted", os.Getenv("EXCHANGE_NAME")),
 		os.Getenv("EXCHANGE_TYPE"), true, false, false, false, amqp.Table{}); err != nil {
 		log.Fatalf("%v", err)
 	}
+	if queue, err := channel.QueueDeclare(fmt.Sprintf("%v.unrouted", os.Getenv("EXCHANGE_NAME")), true, false, false,
+		false, amqp.Table{}); err == nil {
+		err = channel.QueueBind(queue.Name, "#",
+			fmt.Sprintf("%v.unrouted", os.Getenv("EXCHANGE_NAME")), false,
+			amqp.Table{})
+		if err != nil {
+			log.Fatalf("%v", err)
+		}
+	} else {
+		if err != nil {
+			log.Fatalf("%v", err)
+		}
+	}
 
+	//logs
 	if err := channel.ExchangeDeclare(os.Getenv("EXCHANGE_NAME"), os.Getenv("EXCHANGE_TYPE"),
 		true, false, false, false, amqp.Table{
 			"alternate-exchange": fmt.Sprintf("%v.unrouted", os.Getenv("EXCHANGE_NAME"))}); err != nil {
 		log.Fatalf("%v", err)
 	}
-
 	for i := 1; i <= 4; i++ {
 		if queue, err := channel.QueueDeclare(fmt.Sprintf("logs.0%v", i), true, false, false,
 			false, amqp.Table{}); err == nil {
 			if err := channel.QueueBind(queue.Name, "10", os.Getenv("EXCHANGE_NAME"), false,
-				amqp.Table{"x-max-priority": 10}); err != nil {
+				amqp.Table{}); err != nil {
 				log.Fatalf("%v", err)
 			}
 		} else {
