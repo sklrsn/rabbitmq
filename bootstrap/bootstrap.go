@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -46,21 +47,50 @@ func init() {
 	}
 
 	var wg sync.WaitGroup
-	wg.Add(1)
+	wg.Add(2)
 
-	go func(wg *sync.WaitGroup) {
+	ctx, cancel := context.WithCancel(context.Background())
+	ticker := time.NewTicker(10 * time.Second)
+
+	go func() {
+		defer wg.Done()
+		for {
+			select {
+			case <-ticker.C:
+				if rc.conn != nil {
+					log.Println("Connection established ...")
+					return
+				}
+				log.Println("Connection not established, Please check ...")
+				defer cancel()
+				return
+			}
+		}
+	}()
+
+	go func(ctx context.Context, wg *sync.WaitGroup) {
 		defer wg.Done()
 		for rc.conn == nil {
-			if err := rc.Connect(rabbitmqUser, rabbitmqSecret, rabbitmqHost); err != nil {
-				log.Println(err)
+			select {
+			case <-ctx.Done():
+				log.Println("context expired ....")
+				return
+			default:
+				if err := rc.Connect(rabbitmqUser, rabbitmqSecret, rabbitmqHost); err == nil {
+					log.Println("connected ...")
+					return
+				} else {
+					log.Println(err)
+				}
+				time.Sleep(5 * time.Second)
 			}
-			time.Sleep(5 * time.Second)
 		}
-		log.Println("connected ...")
-	}(&wg)
+
+	}(ctx, &wg)
 
 	wg.Wait()
 }
 
 func main() {
+	log.Println("bootstrap finished")
 }
