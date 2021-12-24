@@ -50,7 +50,7 @@ func init() {
 		os.Exit(1)
 	}
 
-	if len(os.Getenv("EXCHANGE_NAME")) == 0 || len(os.Getenv("EXCHANGE_NAME")) == 0 {
+	if len(os.Getenv("EXCHANGE_NAME")) == 0 || len(os.Getenv("EXCHANGE_TYPE")) == 0 {
 		os.Exit(1)
 	}
 
