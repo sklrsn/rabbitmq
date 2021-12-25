@@ -23,5 +23,9 @@ clean:
 	@docker volume prune -f
 
 produce:
+	@cd tools/pubsub && \
+		make produce
 
 consume:
+	@cd tools/pubsub && \
+		make consume
