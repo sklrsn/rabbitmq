@@ -45,11 +45,10 @@ var (
 
 func init() {
 	rabbitmqHost := os.Getenv("RABBITMQ_HOST")
-	rabbitmqPort := os.Getenv("RABBITMQ_PORT")
 	rabbitmqUser := os.Getenv("RABBITMQ_USER")
 	rabbitmqSecret := os.Getenv("RABBITMQ_PASSWORD")
 
-	if len(rabbitmqHost) == 0 || len(rabbitmqPort) == 0 || len(rabbitmqUser) == 0 || len(rabbitmqSecret) == 0 {
+	if len(rabbitmqHost) == 0 || len(rabbitmqUser) == 0 || len(rabbitmqSecret) == 0 {
 		log.Println("credentials required")
 		os.Exit(1)
 	}
@@ -139,7 +138,7 @@ func main() {
 	for i := 1; i <= 4; i++ {
 		if queue, err := channel.QueueDeclare(fmt.Sprintf("logs.0%v", i), true, false, false,
 			false, amqp.Table{}); err == nil {
-			if err := channel.QueueBind(queue.Name, "10", os.Getenv("EXCHANGE_NAME"), false,
+			if err := channel.QueueBind(queue.Name, os.Getenv("BINDING_KEY"), os.Getenv("EXCHANGE_NAME"), false,
 				amqp.Table{}); err != nil {
 				log.Fatalf("%v", err)
 			}
