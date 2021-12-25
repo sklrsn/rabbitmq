@@ -126,7 +126,7 @@ func Consume(queue string, frequency, workers int) {
 					if err := json.Unmarshal(m.Body, &body); err != nil {
 						log.Fatalf("%v", err)
 					}
-					log.Println(m.Body)
+					log.Println(string(m.Body))
 				}
 			}
 		}(i)
