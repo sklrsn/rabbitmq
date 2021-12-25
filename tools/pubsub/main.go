@@ -25,8 +25,8 @@ var (
 )
 
 var (
-	modeProducer = "producer"
-	modeConsumer = "consumer"
+	modeProduce = "produce"
+	modeConsume = "consume"
 )
 
 var (
@@ -53,10 +53,10 @@ func main() {
 		log.Fatalf("%v", err)
 	}
 	switch mode {
-	case modeProducer:
+	case modeProduce:
 		Produce(exchange, workers)
 
-	case modeConsumer:
+	case modeConsume:
 		Consume(queue, frequency, workers)
 	default:
 		os.Exit(1)
