@@ -57,6 +57,9 @@ func main() {
 	if err := rc.Connect(rabbitmqUser, rabbitmqSecret, rabbitmqHost); err != nil {
 		log.Fatalf("%v", err)
 	}
+
+	log.Printf("RabbitMQ connection status:%v", rc.IsConnected())
+
 	switch mode {
 	case modeProduce:
 		Produce(exchange, workers)
