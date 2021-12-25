@@ -126,6 +126,7 @@ func Consume(queue string, frequency, workers int) {
 						log.Fatalf("%v", err)
 					}
 					log.Println(string(m.Body))
+					m.Ack(false)
 				}
 			}
 		}(i)
