@@ -57,7 +57,6 @@ func main() {
 	if err := rc.Connect(rabbitmqUser, rabbitmqSecret, rabbitmqHost); err != nil {
 		log.Fatalf("%v", err)
 	}
-
 	log.Printf("RabbitMQ connection status:%v", rc.IsConnected())
 
 	switch mode {
@@ -96,7 +95,7 @@ func Produce(exchange string, workers int) {
 					}
 					if err := ch.Publish(exchange, routingkey, false, false,
 						amqp.Publishing{
-							UserId:      strconv.Itoa(id),
+							UserId:      rabbitmqUser,
 							Body:        bs,
 							ContentType: "application/json"}); err != nil {
 						log.Fatalf("%v", err)
