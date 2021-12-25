@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/signal"
 	"strconv"
+	"syscall"
 	"time"
 
 	"github.com/streadway/amqp"
@@ -49,15 +51,21 @@ func init() {
 }
 
 func main() {
+	ch := make(chan os.Signal, 2)
+	signal.Notify(ch, syscall.SIGTERM)
+
 	if err := rc.Connect(rabbitmqUser, rabbitmqSecret, rabbitmqHost); err != nil {
 		log.Fatalf("%v", err)
 	}
 	switch mode {
 	case modeProduce:
 		Produce(exchange, workers)
+		<-ch
 
 	case modeConsume:
 		Consume(queue, frequency, workers)
+		<-ch
+
 	default:
 		os.Exit(1)
 	}
