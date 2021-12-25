@@ -65,6 +65,7 @@ func main() {
 }
 
 func Produce(exchange string, workers int) {
+	log.Println("starting producers ..")
 	for i := 0; i < workers; i++ {
 		go func(id int) {
 			ch, err := rc.Channel()
