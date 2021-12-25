@@ -13,3 +13,6 @@ produce: compile
 consume: compile
 	@./bin/pubsub --queue=logs.01 --frequency=3  --mode=consume --workers=4 \
 		--host=localhost --secret=guest --user=guest
+
+clean:
+	@rm -rf bin/

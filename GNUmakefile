@@ -21,6 +21,8 @@ commit:
 clean:
 	@docker system prune -f
 	@docker volume prune -f
+	@cd tools/pubsub && \
+		make clean
 
 produce:
 	@cd tools/pubsub && \
