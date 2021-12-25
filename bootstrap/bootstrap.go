@@ -116,10 +116,9 @@ func main() {
 		log.Fatalf("%v", err)
 	}
 	if queue, err := channel.QueueDeclare(fmt.Sprintf("%v.unrouted", os.Getenv("EXCHANGE_NAME")), true,
-		false, false, false, amqp.Table{}); err == nil {
+		false, false, false, amqp.Table{"x-queue-type": "quorum"}); err == nil {
 		err = channel.QueueBind(queue.Name, "#",
-			fmt.Sprintf("%v.unrouted", os.Getenv("EXCHANGE_NAME")), false,
-			amqp.Table{"x-queue-type": "quorum"})
+			fmt.Sprintf("%v.unrouted", os.Getenv("EXCHANGE_NAME")), false, amqp.Table{})
 		if err != nil {
 			log.Fatalf("%v", err)
 		}
