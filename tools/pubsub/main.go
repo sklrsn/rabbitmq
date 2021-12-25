@@ -71,7 +71,6 @@ func main() {
 	default:
 		os.Exit(1)
 	}
-
 }
 
 func Produce(exchange string, workers int) {
