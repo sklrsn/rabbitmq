@@ -7,7 +7,7 @@ compile:
 	@go build -o bin/pubsub .
 
 produce: compile
-	@./bin/pubsub --exchange=logs --frequency=3 --routingkey=os.linux.* --workers=4 \
+	@./bin/pubsub --exchange=logs --frequency=3 --routingkey=9 --workers=4 \
 		--host=localhost --secret=guest --user=guest --mode=produce
 
 consume: compile

@@ -112,7 +112,7 @@ func main() {
 
 	//unrouted
 	if err := channel.ExchangeDeclare(fmt.Sprintf("%v.unrouted", os.Getenv("EXCHANGE_NAME")),
-		os.Getenv("EXCHANGE_TYPE"), true, false, false, false, amqp.Table{}); err != nil {
+		"topic", true, false, false, false, amqp.Table{}); err != nil {
 		log.Fatalf("%v", err)
 	}
 	if queue, err := channel.QueueDeclare(fmt.Sprintf("%v.unrouted", os.Getenv("EXCHANGE_NAME")), true,
@@ -130,7 +130,7 @@ func main() {
 
 	//deadletter
 	if err := channel.ExchangeDeclare(fmt.Sprintf("%v.deadletter", os.Getenv("EXCHANGE_NAME")),
-		os.Getenv("EXCHANGE_TYPE"), true, false, false, false, amqp.Table{}); err != nil {
+		"topic", true, false, false, false, amqp.Table{}); err != nil {
 		log.Fatalf("%v", err)
 	}
 	if queue, err := channel.QueueDeclare(fmt.Sprintf("%v.deadletter", os.Getenv("EXCHANGE_NAME")), true,
