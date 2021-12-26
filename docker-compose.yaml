@@ -19,6 +19,6 @@ services:
       - RABBITMQ_PASSWORD=guest
       - EXCHANGE_NAME=logs
       - EXCHANGE_TYPE=topic
-      - BINDING_KEY=color
+      - BINDING_KEY=os
     depends_on:
       - rabbitmq

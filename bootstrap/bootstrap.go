@@ -152,14 +152,16 @@ func main() {
 			"alternate-exchange": fmt.Sprintf("%v.unrouted", os.Getenv("EXCHANGE_NAME"))}); err != nil {
 		log.Fatalf("%v", err)
 	}
-	for idx := 1; idx <= 3; idx++ {
+	for idx := 1; idx <= 4; idx++ {
 		switch idx {
 		case 1:
-			logQueues(channel, idx, fmt.Sprintf("%v.red.*", os.Getenv("BINDING_KEY")))
+			logQueues(channel, idx, fmt.Sprintf("%v.linux.*", os.Getenv("BINDING_KEY")))
 		case 2:
-			logQueues(channel, idx, fmt.Sprintf("%v.green.*", os.Getenv("BINDING_KEY")))
+			logQueues(channel, idx, fmt.Sprintf("%v.windows.*", os.Getenv("BINDING_KEY")))
 		case 3:
-			logQueues(channel, idx, fmt.Sprintf("%v.blue.*", os.Getenv("BINDING_KEY")))
+			logQueues(channel, idx, fmt.Sprintf("%v.mac.*", os.Getenv("BINDING_KEY")))
+		case 4:
+			logQueues(channel, idx, fmt.Sprintf("%v.others.*", os.Getenv("BINDING_KEY")))
 		}
 	}
 
