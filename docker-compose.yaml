@@ -18,7 +18,7 @@ services:
       - RABBITMQ_USER=guest
       - RABBITMQ_PASSWORD=guest
       - EXCHANGE_NAME=logs
-      - EXCHANGE_TYPE=topic
-      - BINDING_KEY=os
+      - EXCHANGE_TYPE=x-consistent-hash
+      - BINDING_KEY=10
     depends_on:
       - rabbitmq
