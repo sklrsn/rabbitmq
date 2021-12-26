@@ -152,19 +152,30 @@ func main() {
 			"alternate-exchange": fmt.Sprintf("%v.unrouted", os.Getenv("EXCHANGE_NAME"))}); err != nil {
 		log.Fatalf("%v", err)
 	}
-	for i := 1; i <= 4; i++ {
-		if queue, err := channel.QueueDeclare(fmt.Sprintf("logs.0%v", i), true, false, false,
-			false, amqp.Table{
-				"x-dead-letter-exchange": fmt.Sprintf("%v.deadletter", os.Getenv("EXCHANGE_NAME")),
-				"x-queue-type":           "quorum"}); err == nil {
-			if err := channel.QueueBind(queue.Name, os.Getenv("BINDING_KEY"), os.Getenv("EXCHANGE_NAME"), false,
-				amqp.Table{}); err != nil {
-				log.Fatalf("%v", err)
-			}
-		} else {
-			log.Fatalf("%v", err)
+	for idx := 1; idx <= 3; idx++ {
+		switch idx {
+		case 1:
+			logQueues(channel, idx, fmt.Sprintf("%v.red.*", os.Getenv("BINDING_KEY")))
+		case 2:
+			logQueues(channel, idx, fmt.Sprintf("%v.green.*", os.Getenv("BINDING_KEY")))
+		case 3:
+			logQueues(channel, idx, fmt.Sprintf("%v.blue.*", os.Getenv("BINDING_KEY")))
 		}
 	}
 
 	log.Println("bootstrap finished ...")
+}
+
+func logQueues(channel *amqp.Channel, idx int, bKey string) {
+	if queue, err := channel.QueueDeclare(fmt.Sprintf("logs.0%v", idx), true, false, false,
+		false, amqp.Table{
+			"x-dead-letter-exchange": fmt.Sprintf("%v.deadletter", os.Getenv("EXCHANGE_NAME")),
+			"x-queue-type":           "quorum"}); err == nil {
+		if err := channel.QueueBind(queue.Name, bKey,
+			os.Getenv("EXCHANGE_NAME"), false, amqp.Table{}); err != nil {
+			log.Fatalf("%v", err)
+		}
+	} else {
+		log.Fatalf("%v", err)
+	}
 }

@@ -7,11 +7,11 @@ compile:
 	@go build -o bin/pubsub .
 
 produce: compile
-	@./bin/pubsub --exchange=logs --frequency=3 --routingkey=# --workers=4 \
+	@./bin/pubsub --exchange=logs --frequency=3 --routingkey=color.*.* --workers=3 \
 		--host=localhost --secret=guest --user=guest --mode=produce
 
 consume: compile
-	@./bin/pubsub --queue=logs.01 --frequency=3  --mode=consume --workers=4 \
+	@./bin/pubsub --queue=logs.01 --frequency=3  --mode=consume --workers=3 \
 		--host=localhost --secret=guest --user=guest
 
 clean:
