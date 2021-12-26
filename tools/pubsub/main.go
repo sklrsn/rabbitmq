@@ -114,7 +114,7 @@ func Consume(queue string, frequency, workers int) {
 			if err != nil {
 				log.Fatalf("%v", err)
 			}
-			d, err := ch.Consume(queue, strconv.Itoa(id), true, false, false, true, amqp.Table{})
+			d, err := ch.Consume(queue, strconv.Itoa(id), false, false, false, true, amqp.Table{})
 			if err != nil {
 				log.Fatalf("%v", err)
 			}
@@ -122,11 +122,13 @@ func Consume(queue string, frequency, workers int) {
 			for {
 				select {
 				case m := <-d:
+					log.Println(string(m.Body))
+
 					var body map[string]interface{}
 					if err := json.Unmarshal(m.Body, &body); err != nil {
 						log.Fatalf("%v", err)
 					}
-					log.Println(string(m.Body))
+					m.Ack(true)
 				}
 			}
 		}(i)
