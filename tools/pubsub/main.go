@@ -133,6 +133,7 @@ func Consume(queue string, frequency, workers int) {
 					}
 					m.Ack(true)
 					//m.Reject(true)
+					//m.Nack(true, true)
 				}
 			}
 		}(i)
