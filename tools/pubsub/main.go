@@ -131,8 +131,8 @@ func Consume(queue string, frequency, workers int) {
 					if err := json.Unmarshal(m.Body, &body); err != nil {
 						log.Fatalf("%v", err)
 					}
-					//m.Ack(true)
-					m.Reject(true)
+					m.Ack(true)
+					//m.Reject(true)
 					//m.Nack(true, true)
 				}
 			}
