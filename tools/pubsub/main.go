@@ -112,9 +112,6 @@ func Consume(queue string, frequency, workers int) {
 			if err != nil {
 				log.Fatalf("%v", err)
 			}
-			// if err := ch.Qos(10, 0, true); err != nil {
-			// 	log.Fatalf("%v", err)
-			// }
 			d, err := ch.Consume(queue, strconv.Itoa(id), true, false, false, true, amqp.Table{})
 			if err != nil {
 				log.Fatalf("%v", err)
