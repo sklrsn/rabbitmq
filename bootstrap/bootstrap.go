@@ -128,6 +128,24 @@ func main() {
 		}
 	}
 
+	//deadletter
+	if err := channel.ExchangeDeclare(fmt.Sprintf("%v.deadletter", os.Getenv("EXCHANGE_NAME")),
+		os.Getenv("EXCHANGE_TYPE"), true, false, false, false, amqp.Table{}); err != nil {
+		log.Fatalf("%v", err)
+	}
+	if queue, err := channel.QueueDeclare(fmt.Sprintf("%v.deadletter", os.Getenv("EXCHANGE_NAME")), true,
+		false, false, false, amqp.Table{"x-queue-type": "quorum"}); err == nil {
+		err = channel.QueueBind(queue.Name, "#",
+			fmt.Sprintf("%v.deadletter", os.Getenv("EXCHANGE_NAME")), false, amqp.Table{})
+		if err != nil {
+			log.Fatalf("%v", err)
+		}
+	} else {
+		if err != nil {
+			log.Fatalf("%v", err)
+		}
+	}
+
 	//logs
 	if err := channel.ExchangeDeclare(os.Getenv("EXCHANGE_NAME"), os.Getenv("EXCHANGE_TYPE"),
 		true, false, false, false, amqp.Table{
@@ -136,7 +154,9 @@ func main() {
 	}
 	for i := 1; i <= 4; i++ {
 		if queue, err := channel.QueueDeclare(fmt.Sprintf("logs.0%v", i), true, false, false,
-			false, amqp.Table{"x-queue-type": "quorum"}); err == nil {
+			false, amqp.Table{
+				"dead-letter-exchange": fmt.Sprintf("%v.deadletter", os.Getenv("EXCHANGE_NAME")),
+				"x-queue-type":         "quorum"}); err == nil {
 			if err := channel.QueueBind(queue.Name, os.Getenv("BINDING_KEY"), os.Getenv("EXCHANGE_NAME"), false,
 				amqp.Table{}); err != nil {
 				log.Fatalf("%v", err)
