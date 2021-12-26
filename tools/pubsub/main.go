@@ -132,8 +132,8 @@ func Consume(queue string, frequency, workers int) {
 						log.Fatalf("%v", err)
 					}
 					//m.Ack(true)
-					//m.Reject(true)
-					m.Nack(true, true)
+					m.Reject(true)
+					//m.Nack(true, true)
 				}
 			}
 		}(i)
