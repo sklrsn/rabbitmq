@@ -63,10 +63,12 @@ func main() {
 	case modeProduce:
 		Produce(exchange, workers)
 		<-ch
+		rc.Close()
 
 	case modeConsume:
 		Consume(queue, frequency, workers)
 		<-ch
+		rc.Close()
 
 	default:
 		os.Exit(1)
