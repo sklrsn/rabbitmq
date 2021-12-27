@@ -135,7 +135,6 @@ func Consume(queue string, frequency, workers int) {
 					}
 					if *reject {
 						m.Nack(true, false)
-
 					} else {
 						m.Ack(true)
 					}
