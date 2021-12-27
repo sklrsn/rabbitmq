@@ -11,7 +11,7 @@ produce: compile
 		--host=localhost --secret=guest --user=guest --mode=produce
 
 consume: compile
-	@./bin/pubsub --queue=logs.01 --frequency=5  --mode=consume --workers=4 \
+	@./bin/pubsub --queue=logs.02 --frequency=5  --mode=consume --workers=4 \
 		--host=localhost --secret=guest --user=guest
 
 clean:
