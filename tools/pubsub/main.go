@@ -79,6 +79,7 @@ func main() {
 
 func Produce(exchange string, workers int) {
 	log.Println("starting producers ..")
+	seq := NextInt()
 	for i := 0; i < workers; i++ {
 		go func(id int) {
 			ch, err := rc.Channel()
@@ -90,6 +91,7 @@ func Produce(exchange string, workers int) {
 				select {
 				case <-ticker.C:
 					message := make(map[string]interface{})
+					message["id"] = seq()
 					message["timestamp"] = time.Now().String()
 
 					bs, err := json.Marshal(message)
@@ -141,6 +143,15 @@ func Consume(queue string, frequency, workers int) {
 				}
 			}
 		}(i)
+	}
+}
+
+func NextInt() func() int64 {
+	var number int64
+	number = 0
+	return func() int64 {
+		number += 1
+		return number
 	}
 }
 
