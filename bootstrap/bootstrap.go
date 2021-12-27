@@ -166,46 +166,7 @@ func main() {
 				logQueues(channel, idx, fmt.Sprintf("%v.others.*", os.Getenv("BINDING_KEY")))
 			}
 		}
-	case "direct":
-		for idx := 1; idx <= 4; idx++ {
-			switch idx {
-			case 1:
-				logQueues(channel, idx, fmt.Sprintf("%v", os.Getenv("BINDING_KEY")))
-			case 2:
-				logQueues(channel, idx, fmt.Sprintf("%v", os.Getenv("BINDING_KEY")))
-			case 3:
-				logQueues(channel, idx, fmt.Sprintf("%v", os.Getenv("BINDING_KEY")))
-			case 4:
-				logQueues(channel, idx, fmt.Sprintf("%v", os.Getenv("BINDING_KEY")))
-			}
-		}
-	case "fanout":
-		for idx := 1; idx <= 4; idx++ {
-			switch idx {
-			case 1:
-				logQueues(channel, idx, fmt.Sprintf("%v", os.Getenv("BINDING_KEY")))
-			case 2:
-				logQueues(channel, idx, fmt.Sprintf("%v", os.Getenv("BINDING_KEY")))
-			case 3:
-				logQueues(channel, idx, fmt.Sprintf("%v", os.Getenv("BINDING_KEY")))
-			case 4:
-				logQueues(channel, idx, fmt.Sprintf("%v", os.Getenv("BINDING_KEY")))
-			}
-		}
-	case "headers":
-		for idx := 1; idx <= 4; idx++ {
-			switch idx {
-			case 1:
-				logQueues(channel, idx, fmt.Sprintf("%v", os.Getenv("BINDING_KEY")))
-			case 2:
-				logQueues(channel, idx, fmt.Sprintf("%v", os.Getenv("BINDING_KEY")))
-			case 3:
-				logQueues(channel, idx, fmt.Sprintf("%v", os.Getenv("BINDING_KEY")))
-			case 4:
-				logQueues(channel, idx, fmt.Sprintf("%v", os.Getenv("BINDING_KEY")))
-			}
-		}
-	case "x-consistent-hash":
+	case "direct", "fanout", "headers", "x-consistent-hash":
 		for idx := 1; idx <= 4; idx++ {
 			switch idx {
 			case 1:
@@ -219,7 +180,6 @@ func main() {
 			}
 		}
 	}
-
 	log.Println("bootstrap finished ...")
 }
 
