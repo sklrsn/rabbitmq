@@ -20,6 +20,7 @@ var (
 	exchange, routingkey string
 	frequency            int
 	queue                string
+	reject               *bool
 )
 
 var (
@@ -42,6 +43,7 @@ func init() {
 	flag.StringVar(&routingkey, "routingkey", "", "--routingkey=linux")
 	flag.IntVar(&frequency, "frequency", 5, "--frequency=5 (in secs)")
 	flag.StringVar(&queue, "queue", "", "--queue=logs.01")
+	reject = flag.Bool("reject", false, "--reject")
 
 	flag.StringVar(&rabbitmqHost, "host", "", "--host=localhost")
 	flag.StringVar(&rabbitmqSecret, "secret", "", "--secret=guest")
@@ -131,9 +133,12 @@ func Consume(queue string, frequency, workers int) {
 					if err := json.Unmarshal(m.Body, &body); err != nil {
 						log.Fatalf("%v", err)
 					}
-					//m.Ack(true)
-					//m.Reject(true)
-					m.Nack(true, false)
+					if *reject {
+						m.Nack(true, false)
+
+					} else {
+						m.Ack(true)
+					}
 				}
 			}
 		}(i)

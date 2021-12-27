@@ -12,7 +12,7 @@ produce: compile
 
 consume: compile
 	@./bin/pubsub --queue=logs.02 --frequency=5  --mode=consume --workers=4 \
-		--host=localhost --secret=guest --user=guest
+		--host=localhost --secret=guest --user=guest --reject
 
 clean:
 	@rm -rf bin/
