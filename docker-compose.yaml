@@ -33,5 +33,5 @@ services:
       test: [ "date" ]
       interval: 1m30s
       timeout: 30s
-      retries: 5
+      retries: 10
       start_period: 30s

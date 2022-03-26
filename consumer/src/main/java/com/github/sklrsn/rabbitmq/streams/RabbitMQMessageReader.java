@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.concurrent.TimeoutException;
 
 public class RabbitMQMessageReader implements MessageReader {
     private static ConsoleLogger logger = ConsoleLogger.getInstance();
@@ -82,6 +83,14 @@ public class RabbitMQMessageReader implements MessageReader {
 
     @Override
     public void close() {
-
+        this.channel.ifPresent(ch -> {
+            try {
+                ch.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

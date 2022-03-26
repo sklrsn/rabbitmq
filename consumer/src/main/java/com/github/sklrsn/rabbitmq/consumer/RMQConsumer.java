@@ -35,10 +35,15 @@ public class RMQConsumer {
             rmqReader.open();
             rmqWriter.open();
 
+            rmqReader.read();
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (TimeoutException e) {
             e.printStackTrace();
+        } finally {
+            rmqReader.close();
+            rmqWriter.close();
         }
     }
 }
