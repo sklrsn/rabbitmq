@@ -1,22 +1,20 @@
 package com.github.sklrsn.rabbitmq;
 
 import com.github.sklrsn.rabbitmq.consumer.RMQConsumer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.sklrsn.rabbitmq.logger.ConsoleLogger;
 
 public class Main {
-    private static final Logger logger = LoggerFactory.getLogger(Main.class.getName());
+    private static ConsoleLogger logger = ConsoleLogger.getInstance();
 
     public static void main(String[] args) {
-        System.out.println("starting consumer ..");
-        
+        logger.info("starting consumer ..");
+
         RMQConsumer consumer = new RMQConsumer();
         consumer.start();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("consumer is shutting down");
-            System.exit(0);
+            logger.info("consumer is shutting down");
+            Runtime.getRuntime().halt(1);
         }));
-        
     }
 }

@@ -22,5 +22,5 @@ run:
 	@java -jar target/rabbitmq-consumer-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 docker:
-	docker build -t maven-builder:latest .
-	docker run maven-builder:latest
+	@docker build -t maven-builder:latest .
+	@docker run maven-builder:latest
