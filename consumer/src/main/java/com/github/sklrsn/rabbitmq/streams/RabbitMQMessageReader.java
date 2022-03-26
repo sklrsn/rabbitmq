@@ -6,10 +6,6 @@ import com.rabbitmq.client.*;
 import lombok.NonNull;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.concurrent.TimeoutException;
 
 public class RabbitMQMessageReader implements MessageReader {
     private static ConsoleLogger logger = ConsoleLogger.getInstance();
@@ -33,7 +29,7 @@ public class RabbitMQMessageReader implements MessageReader {
         for (String queue : config.getQueues()) {
             Channel channel = rmqConnection.openChannel().orElseThrow();
             channel.queueDeclarePassive(queue);
-            channel.basicConsume(queue, true, new Consumer() {
+            channel.basicConsume(queue, true, "jconsumerctl", new Consumer() {
                 @Override
                 public void handleConsumeOk(String s) {
                 }
