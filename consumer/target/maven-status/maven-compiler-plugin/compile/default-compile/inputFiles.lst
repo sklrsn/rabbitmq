@@ -1,7 +1,0 @@
-/Users/skalai/go/src/github.com/sklrsn/rabbitmq/consumer/src/main/java/com/github/sklrsn/rabbitmq/connection/RMQConnection.java
-/Users/skalai/go/src/github.com/sklrsn/rabbitmq/consumer/src/main/java/com/github/sklrsn/rabbitmq/consumer/RMQConsumer.java
-/Users/skalai/go/src/github.com/sklrsn/rabbitmq/consumer/src/main/java/com/github/sklrsn/rabbitmq/streams/MessageReader.java
-/Users/skalai/go/src/github.com/sklrsn/rabbitmq/consumer/src/main/java/com/github/sklrsn/rabbitmq/streams/RabbitMQMessageReader.java
-/Users/skalai/go/src/github.com/sklrsn/rabbitmq/consumer/src/main/java/com/github/sklrsn/rabbitmq/streams/MessageWriter.java
-/Users/skalai/go/src/github.com/sklrsn/rabbitmq/consumer/src/main/java/com/github/sklrsn/rabbitmq/Main.java
-/Users/skalai/go/src/github.com/sklrsn/rabbitmq/consumer/src/main/java/com/github/sklrsn/rabbitmq/streams/RabbitMQMessageWriter.java
