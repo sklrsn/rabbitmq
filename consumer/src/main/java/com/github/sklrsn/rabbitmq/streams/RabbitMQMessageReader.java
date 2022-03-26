@@ -15,7 +15,6 @@ public class RabbitMQMessageReader implements MessageReader {
     private static ConsoleLogger logger = ConsoleLogger.getInstance();
     private Config config;
     private Connection rmqConnection;
-    private Optional<Channel> channel;
 
     public RabbitMQMessageReader(@NonNull Config config, @NonNull Connection connection) {
         this.config = config;
@@ -24,73 +23,48 @@ public class RabbitMQMessageReader implements MessageReader {
 
     @Override
     public void open() {
-        try {
-            this.channel = rmqConnection.openChannel();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (!this.channel.isPresent()) {
+        if (!this.rmqConnection.isOpen()) {
             throw new RuntimeException("channel is not open");
         }
     }
 
     @Override
-    public void read() {
+    public void read() throws IOException {
         for (String queue : config.getQueues()) {
-            this.channel.ifPresent(ch -> {
-                try {
-                    ch.queueDeclarePassive(queue);
+            Channel channel = rmqConnection.openChannel().orElseThrow();
+            channel.queueDeclarePassive(queue);
+            channel.basicConsume(queue, true, new Consumer() {
+                @Override
+                public void handleConsumeOk(String s) {
+                }
 
-                    ch.basicConsume(queue, true, new Consumer() {
-                        @Override
-                        public void handleConsumeOk(String s) {
+                @Override
+                public void handleCancelOk(String s) {
+                }
 
-                        }
+                @Override
+                public void handleCancel(String s) throws IOException {
+                }
 
-                        @Override
-                        public void handleCancelOk(String s) {
+                @Override
+                public void handleShutdownSignal(String s, ShutdownSignalException e) {
+                }
 
-                        }
+                @Override
+                public void handleRecoverOk(String s) {
+                }
 
-                        @Override
-                        public void handleCancel(String s) throws IOException {
-
-                        }
-
-                        @Override
-                        public void handleShutdownSignal(String s, ShutdownSignalException e) {
-
-                        }
-
-                        @Override
-                        public void handleRecoverOk(String s) {
-
-                        }
-
-                        @Override
-                        public void handleDelivery(String s, Envelope envelope, AMQP.BasicProperties basicProperties, byte[] bytes) throws IOException {
-                            logger.info(envelope.getExchange());
-                            logger.info(s);
-                            logger.info(bytes.toString());
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
+                @Override
+                public void handleDelivery(String s, Envelope envelope, AMQP.BasicProperties basicProperties,
+                                           byte[] bytes) throws IOException {
+                    logger.info(bytes.toString());
                 }
             });
         }
+
     }
 
     @Override
     public void close() {
-        this.channel.ifPresent(ch -> {
-            try {
-                ch.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (TimeoutException e) {
-                e.printStackTrace();
-            }
-        });
     }
 }
