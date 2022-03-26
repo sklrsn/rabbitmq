@@ -4,7 +4,7 @@
 
     <groupId>com.github.sklrsn.rabbitmq</groupId>
     <artifactId>rabbitmq-consumer</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -41,6 +41,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.2</version>
                 <configuration>
+                    <!-- <finalName>rabbitmq-consumer</finalName> -->
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
@@ -54,6 +55,7 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
+                    <!-- <finalName>rabbitmq-consumer</finalName> -->
                     <archive>
                         <manifest>
                             <mainClass>com.github.sklrsn.rabbitmq.Main</mainClass>
