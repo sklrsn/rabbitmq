@@ -27,4 +27,11 @@ services:
   consumer:
     build: consumer
     depends_on:
-      - rabbitmq
+      - bootstrap
+    restart: on-failure
+    healthcheck:
+      test: [ "date" ]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
