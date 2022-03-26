@@ -1,16 +1,20 @@
 package com.github.sklrsn.rabbitmq.streams;
 
+import com.github.sklrsn.rabbitmq.config.Config;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
+import lombok.NonNull;
 
 import java.io.IOException;
 import java.util.Optional;
 
 public class RabbitMQMessageReader implements MessageReader {
+    private Config config;
     private Connection rmqConnection;
     private Optional<Channel> channel;
 
-    public RabbitMQMessageReader(Connection connection) {
+    public RabbitMQMessageReader(@NonNull Config config, @NonNull Connection connection) {
+        this.config = config;
         this.rmqConnection = connection;
     }
 
@@ -25,7 +29,6 @@ public class RabbitMQMessageReader implements MessageReader {
 
     @Override
     public void read() {
-
     }
 
     @Override
