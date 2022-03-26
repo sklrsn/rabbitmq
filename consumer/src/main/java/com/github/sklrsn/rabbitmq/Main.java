@@ -8,7 +8,8 @@ public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
-        logger.info("starting consumer ..");
+        System.out.println("starting consumer ..");
+        
         RMQConsumer consumer = new RMQConsumer();
         consumer.start();
 
@@ -16,5 +17,6 @@ public class Main {
             System.out.println("consumer is shutting down");
             System.exit(0);
         }));
+        
     }
 }
