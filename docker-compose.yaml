@@ -23,3 +23,8 @@ services:
       - BINDING_KEY=10
     depends_on:
       - rabbitmq
+
+  consumer:
+    build: consumer
+    depends_on:
+      - rabbitmq
