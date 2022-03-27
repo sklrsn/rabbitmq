@@ -1,11 +1,17 @@
 package com.github.sklrsn.rabbitmq.streams;
 
+import java.io.IOException;
+
 import com.github.sklrsn.rabbitmq.config.Config;
 import com.github.sklrsn.rabbitmq.logger.ConsoleLogger;
-import com.rabbitmq.client.*;
-import lombok.NonNull;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.Consumer;
+import com.rabbitmq.client.Envelope;
+import com.rabbitmq.client.ShutdownSignalException;
 
-import java.io.IOException;
+import lombok.NonNull;
 
 public class RabbitMQMessageReader implements MessageReader {
     private static ConsoleLogger logger = ConsoleLogger.getInstance();
@@ -54,7 +60,7 @@ public class RabbitMQMessageReader implements MessageReader {
                 @Override
                 public void handleDelivery(String s, Envelope envelope,
                         AMQP.BasicProperties basicProperties, byte[] bytes) throws IOException {
-                    logger.info(bytes.toString());
+                    logger.info(new String(bytes));
                 }
             });
         }
