@@ -37,10 +37,9 @@ public class RMQConsumer {
 
             rmqReader.read();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Runtime.getRuntime().halt(1);
         } finally {
             rmqReader.close();
             rmqWriter.close();

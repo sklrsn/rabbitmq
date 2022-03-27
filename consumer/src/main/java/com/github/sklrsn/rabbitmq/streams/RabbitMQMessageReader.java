@@ -20,7 +20,7 @@ public class RabbitMQMessageReader implements MessageReader {
     @Override
     public void open() {
         if (!this.rmqConnection.isOpen()) {
-            throw new RuntimeException("channel is not open");
+            throw new RuntimeException("connection is closed");
         }
     }
 
@@ -44,6 +44,7 @@ public class RabbitMQMessageReader implements MessageReader {
 
                 @Override
                 public void handleShutdownSignal(String s, ShutdownSignalException e) {
+                    System.out.println("channel is shutting down");
                 }
 
                 @Override
@@ -51,8 +52,8 @@ public class RabbitMQMessageReader implements MessageReader {
                 }
 
                 @Override
-                public void handleDelivery(String s, Envelope envelope, AMQP.BasicProperties basicProperties,
-                                           byte[] bytes) throws IOException {
+                public void handleDelivery(String s, Envelope envelope,
+                        AMQP.BasicProperties basicProperties, byte[] bytes) throws IOException {
                     logger.info(bytes.toString());
                 }
             });

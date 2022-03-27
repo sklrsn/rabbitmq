@@ -9,6 +9,8 @@ services:
       - 8080:8080
       - 15671:15671
       - 15672:15672
+    healthcheck:
+      test: "exit 0"
 
   bootstrap:
     build: bootstrap
@@ -22,16 +24,14 @@ services:
       - QUEUE_TYPE=classic #classic, quorum
       - BINDING_KEY=10
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: "exit 0"
 
   consumer:
     build: consumer
     depends_on:
-      - bootstrap
+      rabbitmq:
+        condition: service_healthy
     restart: on-failure
-    healthcheck:
-      test: [ "date" ]
-      interval: 1m30s
-      timeout: 30s
-      retries: 10
-      start_period: 30s
