@@ -35,7 +35,7 @@ public class RabbitMQMessageReader implements MessageReader {
         for (String queue : config.getQueues()) {
             Channel channel = rmqConnection.openChannel().orElseThrow();
             channel.queueDeclarePassive(queue);
-            channel.basicConsume(queue, true, "jconsumerctl", new Consumer() {
+            channel.basicConsume(queue, false, "jconsumerctl", new Consumer() {
                 @Override
                 public void handleConsumeOk(String s) {
                 }
@@ -59,8 +59,9 @@ public class RabbitMQMessageReader implements MessageReader {
 
                 @Override
                 public void handleDelivery(String s, Envelope envelope,
-                        AMQP.BasicProperties basicProperties, byte[] bytes) throws IOException {
+                                           AMQP.BasicProperties basicProperties, byte[] bytes) throws IOException {
                     logger.info(new String(bytes));
+                    channel.basicNack(envelope.getDeliveryTag(), true, false);
                 }
             });
         }
